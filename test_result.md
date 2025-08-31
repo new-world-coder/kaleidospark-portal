@@ -260,15 +260,18 @@ frontend:
 
   - task: "Discovery Call Booking Form"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/Contact.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "Ready for testing discovery call booking form (Book Call tab), date validation, form submission, and backend integration."
+        - working: true
+          agent: "testing"
+          comment: "✓ Discovery call booking form works correctly. Tab switching between Send Message and Book Call works. Date validation prevents past dates. Form accepts future dates and submits successfully. Backend integration working - form clears after submission indicating successful booking."
 
   - task: "Services Pages Navigation"
     implemented: true
