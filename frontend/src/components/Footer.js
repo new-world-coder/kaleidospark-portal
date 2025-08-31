@@ -20,7 +20,7 @@ const Footer = () => {
         setEmail('');
       }
     } catch (error) {
-      toast.error('Failed to subscribe. Please try again.');
+      toast.error(error.message || 'Failed to subscribe. Please try again.');
     } finally {
       setIsSubscribing(false);
     }
