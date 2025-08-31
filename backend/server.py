@@ -163,8 +163,12 @@ async def book_discovery_call(booking_data: DiscoveryCallBookingCreate):
         # Create booking
         booking = DiscoveryCallBooking(**booking_data.dict())
         
+        # Convert booking to dict and handle date serialization
+        booking_dict = booking.dict()
+        booking_dict = convert_mongo_doc(booking_dict)
+        
         # Insert into database
-        result = await db.discovery_call_bookings.insert_one(booking.dict())
+        result = await db.discovery_call_bookings.insert_one(booking_dict)
         
         if result.inserted_id:
             return ApiResponse(
