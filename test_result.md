@@ -340,7 +340,17 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Homepage Navigation and Hero Section"
+    - "Header Navigation and Dropdowns"
+    - "Contact Form Functionality"
+    - "Discovery Call Booking Form"
+    - "Services Pages Navigation"
+    - "Industries Pages Navigation"
+    - "Resources Page Newsletter Subscription"
+    - "Events Page Registration Modal"
+    - "Footer Newsletter Subscription"
+    - "Responsive Design and Mobile Navigation"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
