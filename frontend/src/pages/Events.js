@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Users, MapPin, Video, ArrowRight, ExternalLink } from 'lucide-react';
+import { toast } from 'sonner';
 import { events } from '../mockData';
+import { registerForEvent } from '../services/api';
 
 const Events = () => {
   const [selectedType, setSelectedType] = useState('all');
