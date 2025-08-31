@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Mail, Phone, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
-import { subscribeNewsletter } from '../mockData';
+import { subscribeNewsletter } from '../services/api';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
