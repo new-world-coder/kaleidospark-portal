@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Download, FileText, BookOpen, Video, ArrowRight, Filter } from 'lucide-react';
+import { toast } from 'sonner';
 import { resources } from '../mockData';
+import { subscribeNewsletter } from '../services/api';
 
 const Resources = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
