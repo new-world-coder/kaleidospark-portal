@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Calendar, Download, Send } from 'lucide-react';
 import { toast } from 'sonner';
-import { submitContactForm, bookDiscoveryCall } from '../mockData';
+import { submitContactForm, bookDiscoveryCall } from '../services/api';
 
 const Contact = () => {
   const [contactForm, setContactForm] = useState({
