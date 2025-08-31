@@ -7,6 +7,8 @@ import { subscribeNewsletter } from '../services/api';
 
 const Resources = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
   const categories = ['all', 'Strategy', 'Implementation', 'Procurement'];
   
@@ -18,6 +20,24 @@ const Resources = () => {
     // Mock download functionality
     console.log(`Downloading: ${resource.title}`);
     // In a real app, this would trigger the actual download
+  };
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+
+    setIsSubscribing(true);
+    try {
+      const result = await subscribeNewsletter(newsletterEmail);
+      if (result.success) {
+        toast.success(result.message);
+        setNewsletterEmail('');
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   const getResourceIcon = (type) => {
