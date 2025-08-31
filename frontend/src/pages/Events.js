@@ -7,6 +7,13 @@ import { registerForEvent } from '../services/api';
 
 const Events = () => {
   const [selectedType, setSelectedType] = useState('all');
+  const [registrationModal, setRegistrationModal] = useState(null);
+  const [registrationForm, setRegistrationForm] = useState({
+    name: '',
+    email: '',
+    company: ''
+  });
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const eventTypes = ['all', 'Webinar', 'Workshop', 'Conference'];
   
@@ -15,8 +22,31 @@ const Events = () => {
     : events.filter(event => event.type === selectedType);
 
   const handleRegistration = (event) => {
-    console.log(`Registering for: ${event.title}`);
-    // Mock registration functionality
+    setRegistrationModal(event);
+  };
+
+  const handleRegistrationSubmit = async (e) => {
+    e.preventDefault();
+    if (!registrationModal) return;
+
+    setIsRegistering(true);
+    try {
+      const result = await registerForEvent(registrationModal.id.toString(), registrationForm);
+      if (result.success) {
+        toast.success(result.message);
+        setRegistrationForm({ name: '', email: '', company: '' });
+        setRegistrationModal(null);
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to register for event. Please try again.');
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
+  const closeModal = () => {
+    setRegistrationModal(null);
+    setRegistrationForm({ name: '', email: '', company: '' });
   };
 
   const formatDate = (dateString) => {
