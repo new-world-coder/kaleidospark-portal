@@ -214,16 +214,23 @@ const Resources = () => {
             </p>
             
             <div className="max-w-md mx-auto">
-              <div className="flex gap-3">
+              <form onSubmit={handleNewsletterSubmit} className="flex gap-3">
                 <input
                   type="email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="Your email address"
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                  required
                 />
-                <button className="btn-primary shrink-0">
-                  Subscribe
+                <button 
+                  type="submit" 
+                  disabled={isSubscribing}
+                  className="btn-primary shrink-0"
+                >
+                  {isSubscribing ? 'Subscribing...' : 'Subscribe'}
                 </button>
-              </div>
+              </form>
               <p className="text-xs text-gray-600 mt-3">
                 No spam. Unsubscribe anytime. Read our privacy policy.
               </p>
