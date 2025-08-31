@@ -214,8 +214,12 @@ async def subscribe_newsletter(subscription_data: NewsletterSubscriptionCreate):
         # Create new subscription
         subscription = NewsletterSubscription(**subscription_data.dict())
         
+        # Convert subscription to dict and handle date serialization
+        subscription_dict = subscription.dict()
+        subscription_dict = convert_mongo_doc(subscription_dict)
+        
         # Insert into database
-        result = await db.newsletter_subscriptions.insert_one(subscription.dict())
+        result = await db.newsletter_subscriptions.insert_one(subscription_dict)
         
         if result.inserted_id:
             return ApiResponse(
