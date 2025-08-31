@@ -43,7 +43,7 @@ const Contact = () => {
         });
       }
     } catch (error) {
-      toast.error('Failed to send message. Please try again.');
+      toast.error(error.message || 'Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -67,7 +67,7 @@ const Contact = () => {
         });
       }
     } catch (error) {
-      toast.error('Failed to book call. Please try again.');
+      toast.error(error.message || 'Failed to book call. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
