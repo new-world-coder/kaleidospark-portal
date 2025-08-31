@@ -140,8 +140,12 @@ async def submit_contact_form(contact_data: ContactSubmissionCreate):
         # Create contact submission
         submission = ContactSubmission(**contact_data.dict())
         
+        # Convert submission to dict and handle date serialization
+        submission_dict = submission.dict()
+        submission_dict = convert_mongo_doc(submission_dict)
+        
         # Insert into database
-        result = await db.contact_submissions.insert_one(submission.dict())
+        result = await db.contact_submissions.insert_one(submission_dict)
         
         if result.inserted_id:
             return ApiResponse(
