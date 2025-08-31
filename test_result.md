@@ -305,15 +305,18 @@ frontend:
 
   - task: "Resources Page Newsletter Subscription"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/Resources.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "Ready for testing Resources page newsletter subscription functionality and filtering."
+        - working: true
+          agent: "testing"
+          comment: "✓ Resources page works correctly. Page loads with title 'Free Resources for AI Leaders'. Newsletter subscription functionality works with backend integration. Resource filtering by category works properly. Download buttons are functional."
 
   - task: "Events Page Registration Modal"
     implemented: true
