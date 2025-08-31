@@ -254,8 +254,12 @@ async def register_for_event(event_id: str, registration_data: EventRegistration
         registration_dict["event_id"] = event_id
         registration = EventRegistration(**registration_dict)
         
+        # Convert registration to dict and handle date serialization
+        registration_dict = registration.dict()
+        registration_dict = convert_mongo_doc(registration_dict)
+        
         # Insert into database
-        result = await db.event_registrations.insert_one(registration.dict())
+        result = await db.event_registrations.insert_one(registration_dict)
         
         if result.inserted_id:
             return ApiResponse(
