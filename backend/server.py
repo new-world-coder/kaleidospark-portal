@@ -258,12 +258,35 @@ async def register_for_event(event_id: str, registration_data: EventRegistration
         logging.error(f"Event registration error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to register for event")
 
+# Helper function to convert MongoDB documents for JSON serialization
+def convert_mongo_doc(doc):
+    """Convert MongoDB document to JSON serializable format"""
+    if doc is None:
+        return None
+    if isinstance(doc, list):
+        return [convert_mongo_doc(item) for item in doc]
+    if isinstance(doc, dict):
+        converted = {}
+        for key, value in doc.items():
+            if key == "_id":
+                converted[key] = str(value)  # Convert ObjectId to string
+            elif isinstance(value, datetime):
+                converted[key] = value.isoformat()
+            elif isinstance(value, date):
+                converted[key] = value.isoformat()
+            else:
+                converted[key] = convert_mongo_doc(value)
+        return converted
+    return doc
+
 # Admin endpoints (basic - for viewing submissions)
 @api_router.get("/admin/contacts")
 async def get_contact_submissions():
     try:
         submissions = await db.contact_submissions.find().sort("created_at", -1).to_list(100)
-        return {"success": True, "data": submissions}
+        # Convert MongoDB documents for JSON serialization
+        converted_submissions = [convert_mongo_doc(sub) for sub in submissions]
+        return {"success": True, "data": converted_submissions}
     except Exception as e:
         logging.error(f"Error fetching contacts: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch contact submissions")
@@ -272,7 +295,9 @@ async def get_contact_submissions():
 async def get_discovery_call_bookings():
     try:
         bookings = await db.discovery_call_bookings.find().sort("created_at", -1).to_list(100)
-        return {"success": True, "data": bookings}
+        # Convert MongoDB documents for JSON serialization
+        converted_bookings = [convert_mongo_doc(booking) for booking in bookings]
+        return {"success": True, "data": converted_bookings}
     except Exception as e:
         logging.error(f"Error fetching bookings: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch bookings")
@@ -281,7 +306,9 @@ async def get_discovery_call_bookings():
 async def get_newsletter_subscribers():
     try:
         subscribers = await db.newsletter_subscriptions.find({"status": "active"}).sort("subscribed_at", -1).to_list(1000)
-        return {"success": True, "data": subscribers}
+        # Convert MongoDB documents for JSON serialization
+        converted_subscribers = [convert_mongo_doc(sub) for sub in subscribers]
+        return {"success": True, "data": converted_subscribers}
     except Exception as e:
         logging.error(f"Error fetching subscribers: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch subscribers")
