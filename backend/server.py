@@ -225,9 +225,6 @@ async def subscribe_newsletter(subscription_data: NewsletterSubscriptionCreate):
 @api_router.post("/events/{event_id}/register", response_model=ApiResponse)
 async def register_for_event(event_id: str, registration_data: EventRegistrationCreate):
     try:
-        # Set event_id from URL parameter
-        registration_data.event_id = event_id
-        
         # Check if already registered
         existing = await db.event_registrations.find_one({
             "event_id": event_id,
@@ -240,8 +237,10 @@ async def register_for_event(event_id: str, registration_data: EventRegistration
                 message="You're already registered for this event!"
             )
         
-        # Create registration
-        registration = EventRegistration(**registration_data.dict())
+        # Create registration with event_id from URL
+        registration_dict = registration_data.dict()
+        registration_dict["event_id"] = event_id
+        registration = EventRegistration(**registration_dict)
         
         # Insert into database
         result = await db.event_registrations.insert_one(registration.dict())
