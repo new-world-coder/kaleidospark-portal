@@ -12,6 +12,19 @@ const AdminBookings = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
 
+  const generateCalendarInvite = (booking) => {
+    const startDate = new Date(`${booking.preferred_date}T${booking.preferred_time}`);
+    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour later
+
+    const formatCalendarDate = (date) => {
+      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+
+    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Discovery Call with ${booking.name}&dates=${formatCalendarDate(startDate)}/${formatCalendarDate(endDate)}&details=Discovery call with ${booking.name} from ${booking.company}&location=Video Call`;
+    
+    window.open(calendarUrl, '_blank');
+  };
+
   const loadBookings = async () => {
     setLoading(true);
     try {

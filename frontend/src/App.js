@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'sonner';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 // Components
 import Header from "./components/Header";
@@ -27,12 +28,14 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminContacts from "./pages/admin/AdminContacts";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminSubscribers from "./pages/admin/AdminSubscribers";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <GoogleAnalytics />
         <Routes>
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -54,6 +57,11 @@ function App() {
           <Route path="/admin/subscribers" element={
             <ProtectedRoute>
               <AdminSubscribers />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/analytics" element={
+            <ProtectedRoute>
+              <AdminAnalytics />
             </ProtectedRoute>
           } />
           

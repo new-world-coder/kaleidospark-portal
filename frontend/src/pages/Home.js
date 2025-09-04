@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Target, Settings, Brain, Database, Users, ShoppingCart, Factory, Heart, Building, CreditCard, Star, Shield, Award } from 'lucide-react';
+import AIReadinessAssessment from '../components/AIReadinessAssessment';
+import TestimonialsSlider from '../components/TestimonialsSlider';
 import { services, industries, caseStudies } from '../mockData';
 
 const Home = () => {
+  const [showAssessment, setShowAssessment] = useState(false);
+
   const trustBadges = [
     { name: 'Responsible AI', icon: Shield },
     { name: 'GDPR/CCPA', icon: Award },
@@ -56,9 +60,12 @@ const Home = () => {
             <Link to="/contact" className="btn-primary">
               Book a Discovery Call
             </Link>
-            <Link to="/resources" className="btn-secondary">
-              Download AI Readiness Toolkit
-            </Link>
+            <button 
+              onClick={() => setShowAssessment(true)}
+              className="btn-secondary"
+            >
+              Take AI Readiness Assessment
+            </button>
           </div>
         </div>
       </section>
@@ -163,22 +170,7 @@ const Home = () => {
 
           {/* Case Study Highlight */}
           <div className="max-w-4xl mx-auto mb-12">
-            <div className="bg-white rounded-2xl p-8 shadow-sm">
-              <div className="text-center">
-                <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-4">
-                  Case Study Highlight
-                </div>
-                <blockquote className="heading-2 mb-6">
-                  "Retail client reduced $8M in lost sales with AI forecasting."
-                </blockquote>
-                <p className="body-medium text-gray-600 mb-6">
-                  Global retailer achieved 35% inventory improvement and 95% stock availability through our AI-powered demand forecasting solution.
-                </p>
-                <Link to="/case-studies" className="btn-secondary">
-                  Read Full Case Study
-                </Link>
-              </div>
-            </div>
+            <TestimonialsSlider />
           </div>
 
           {/* Trust Badges */}
@@ -222,13 +214,21 @@ const Home = () => {
               <Link to="/contact" className="btn-primary">
                 Book Discovery Call
               </Link>
-              <Link to="/resources" className="btn-secondary">
-                Download AI Readiness Toolkit
-              </Link>
+              <button 
+                onClick={() => setShowAssessment(true)}
+                className="btn-secondary"
+              >
+                Take AI Readiness Assessment
+              </button>
             </div>
           </div>
         </div>
       </section>
+      
+      <AIReadinessAssessment 
+        isOpen={showAssessment} 
+        onClose={() => setShowAssessment(false)} 
+      />
     </div>
   );
 };

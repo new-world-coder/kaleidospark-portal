@@ -11,7 +11,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Contacts', href: '/admin/contacts', icon: Mail },
     { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
     { name: 'Subscribers', href: '/admin/subscribers', icon: Users },
-    { name: 'Events', href: '/admin/events', icon: FileText },
+    { name: 'Analytics', href: '/admin/analytics', icon: FileText },
   ];
 
   const handleLogout = () => {

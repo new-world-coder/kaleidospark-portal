@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Search } from 'lucide-react';
+import SearchModal from './SearchModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
 
   const navigation = [
@@ -106,6 +108,13 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="btn-nav"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
             <Link to="/contact" className="btn-secondary">
               Get Started
             </Link>
@@ -175,6 +184,8 @@ const Header = () => {
           </div>
         )}
       </div>
+      
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 };

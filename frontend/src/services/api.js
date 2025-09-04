@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { trackFormSubmission } from '../components/GoogleAnalytics';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -42,8 +43,13 @@ export const submitContactForm = async (formData) => {
       interest: formData.interest || 'general'
     });
     
+    // Track successful form submission
+    trackFormSubmission('contact_form', true);
+    
     return response;
   } catch (error) {
+    // Track failed form submission
+    trackFormSubmission('contact_form', false);
     throw error;
   }
 };
@@ -59,8 +65,13 @@ export const bookDiscoveryCall = async (bookingData) => {
       timezone: bookingData.timezone
     });
     
+    // Track successful booking
+    trackFormSubmission('discovery_call_booking', true);
+    
     return response;
   } catch (error) {
+    // Track failed booking
+    trackFormSubmission('discovery_call_booking', false);
     throw error;
   }
 };
@@ -71,8 +82,13 @@ export const subscribeNewsletter = async (email) => {
       email: email
     });
     
+    // Track successful newsletter subscription
+    trackFormSubmission('newsletter_subscription', true);
+    
     return response;
   } catch (error) {
+    // Track failed newsletter subscription
+    trackFormSubmission('newsletter_subscription', false);
     throw error;
   }
 };
