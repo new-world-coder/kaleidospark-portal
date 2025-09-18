@@ -1,57 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Search } from 'lucide-react';
 import SearchModal from './SearchModal';
 
-const Header = () => {
+// Move navigation data outside component to prevent recreation on every render
+const navigation = [
+  { name: 'Home', href: '/' },
+  {
+    name: 'Services',
+    href: '/services',
+    dropdown: [
+      { name: 'AI Strategy & Readiness', href: '/services/1' },
+      { name: 'Process Transformation', href: '/services/2' },
+      { name: 'GenAI & Copilots', href: '/services/3' },
+      { name: 'Data & MLOps', href: '/services/4' },
+      { name: 'Training & Change', href: '/services/5' }
+    ]
+  },
+  {
+    name: 'Industries',
+    href: '/industries',
+    dropdown: [
+      { name: 'Retail', href: '/industries/1' },
+      { name: 'Manufacturing', href: '/industries/2' },
+      { name: 'Healthcare', href: '/industries/3' },
+      { name: 'Real Estate', href: '/industries/4' },
+      { name: 'Fintech', href: '/industries/5' }
+    ]
+  },
+  { name: 'Case Studies', href: '/case-studies' },
+  {
+    name: 'Company',
+    href: '/about',
+    dropdown: [
+      { name: 'About Us', href: '/about' },
+      { name: 'Team', href: '/team' },
+      { name: 'Responsible AI', href: '/responsible-ai' }
+    ]
+  },
+  {
+    name: 'Resources',
+    href: '/resources',
+    dropdown: [
+      { name: 'Downloads', href: '/resources' },
+      { name: 'Events', href: '/events' }
+    ]
+  }
+];
+
+const Header = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
-
-  const navigation = [
-    { name: 'Home', href: '/' },
-    {
-      name: 'Services',
-      href: '/services',
-      dropdown: [
-        { name: 'AI Strategy & Readiness', href: '/services/1' },
-        { name: 'Process Transformation', href: '/services/2' },
-        { name: 'GenAI & Copilots', href: '/services/3' },
-        { name: 'Data & MLOps', href: '/services/4' },
-        { name: 'Training & Change', href: '/services/5' }
-      ]
-    },
-    {
-      name: 'Industries',
-      href: '/industries',
-      dropdown: [
-        { name: 'Retail', href: '/industries/1' },
-        { name: 'Manufacturing', href: '/industries/2' },
-        { name: 'Healthcare', href: '/industries/3' },
-        { name: 'Real Estate', href: '/industries/4' },
-        { name: 'Fintech', href: '/industries/5' }
-      ]
-    },
-    { name: 'Case Studies', href: '/case-studies' },
-    {
-      name: 'Company',
-      href: '/about',
-      dropdown: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Team', href: '/team' },
-        { name: 'Responsible AI', href: '/responsible-ai' }
-      ]
-    },
-    {
-      name: 'Resources',
-      href: '/resources',
-      dropdown: [
-        { name: 'Downloads', href: '/resources' },
-        { name: 'Events', href: '/events' }
-      ]
-    }
-  ];
 
   const isActivePath = (href) => {
     if (href === '/') return location.pathname === '/';
@@ -188,6 +189,6 @@ const Header = () => {
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
-};
+});
 
 export default Header;
