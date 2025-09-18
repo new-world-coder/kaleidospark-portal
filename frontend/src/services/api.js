@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { trackFormSubmission } from '../components/GoogleAnalytics';
+import { staticDataCache, generateCacheKey, withCache } from './cache';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 const API = `${BACKEND_URL}/api`;
@@ -12,6 +13,21 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Request interceptor for caching
+apiClient.interceptors.request.use(
+  (config) => {
+    // Add cache-busting for POST/PUT/DELETE requests
+    if (['post', 'put', 'delete'].includes(config.method)) {
+      config.params = {
+        ...config.params,
+        _t: Date.now()
+      };
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Response interceptor for consistent error handling
 apiClient.interceptors.response.use(
@@ -107,33 +123,42 @@ export const registerForEvent = async (eventId, registrationData) => {
   }
 };
 
-// Admin API functions (for future admin dashboard)
-export const getContactSubmissions = async () => {
+// Admin API functions with caching
+export const getContactSubmissions = withCache(
+  staticDataCache,
+  () => generateCacheKey('contacts')
+)(async () => {
   try {
     const response = await apiClient.get('/admin/contacts');
     return response;
   } catch (error) {
     throw error;
   }
-};
+});
 
-export const getDiscoveryCallBookings = async () => {
+export const getDiscoveryCallBookings = withCache(
+  staticDataCache,
+  () => generateCacheKey('bookings')
+)(async () => {
   try {
     const response = await apiClient.get('/admin/bookings');
     return response;
   } catch (error) {
     throw error;
   }
-};
+});
 
-export const getNewsletterSubscribers = async () => {
+export const getNewsletterSubscribers = withCache(
+  staticDataCache,
+  () => generateCacheKey('subscribers')
+)(async () => {
   try {
     const response = await apiClient.get('/admin/subscribers');
     return response;
   } catch (error) {
     throw error;
   }
-};
+});
 
 // Health check
 export const healthCheck = async () => {
