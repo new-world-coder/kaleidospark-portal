@@ -90,7 +90,7 @@ const Header = () => {
 
                 {/* Dropdown Menu */}
                 {item.dropdown && activeDropdown === item.name && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <div className="absolute top-full left-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50" style={{marginTop: '-2px'}}>
                     {item.dropdown.map((subItem) => (
                       <Link
                         key={subItem.name}
