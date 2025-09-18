@@ -39,6 +39,50 @@ module.exports = {
           ],
         };
       }
+
+      // Performance optimizations
+      if (process.env.NODE_ENV === 'production') {
+        // Optimize bundle splitting
+        webpackConfig.optimization = {
+          ...webpackConfig.optimization,
+          splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+              vendor: {
+                test: /[\\/]node_modules[\\/]/,
+                name: 'vendors',
+                chunks: 'all',
+                priority: 10,
+              },
+              common: {
+                name: 'common',
+                minChunks: 2,
+                chunks: 'all',
+                priority: 5,
+                reuseExistingChunk: true,
+              },
+              lucide: {
+                test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
+                name: 'lucide-icons',
+                chunks: 'all',
+                priority: 15,
+              },
+              radix: {
+                test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+                name: 'radix-ui',
+                chunks: 'all',
+                priority: 15,
+              }
+            }
+          },
+          usedExports: true,
+          sideEffects: false,
+        };
+
+        // Enable tree shaking
+        webpackConfig.optimization.usedExports = true;
+        webpackConfig.optimization.sideEffects = false;
+      }
       
       return webpackConfig;
     },

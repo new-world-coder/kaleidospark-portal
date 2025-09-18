@@ -1,42 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Target, Settings, Brain, Database, Users, ShoppingCart, Factory, Heart, Building, CreditCard, Star, Shield, Award } from 'lucide-react';
+import { ArrowRight, Star, Shield, Award, Heart } from 'lucide-react';
+import { getServiceIcon, getIndustryIcon } from '../utils/icons';
 import AIReadinessAssessment from '../components/AIReadinessAssessment';
 import TestimonialsSlider from '../components/TestimonialsSlider';
 import { services, industries, caseStudies } from '../mockData';
 
-const Home = () => {
+// Move static data outside component to prevent recreation
+const trustBadges = [
+  { name: 'Responsible AI', icon: Shield },
+  { name: 'GDPR/CCPA', icon: Award },
+  { name: 'HIPAA Aligned', icon: Heart }
+];
+
+const Home = memo(() => {
   const [showAssessment, setShowAssessment] = useState(false);
 
-  const trustBadges = [
-    { name: 'Responsible AI', icon: Shield },
-    { name: 'GDPR/CCPA', icon: Award },
-    { name: 'HIPAA Aligned', icon: Heart }
-  ];
-
-  const getServiceIcon = (iconName) => {
-    const icons = {
-      target: Target,
-      settings: Settings,
-      brain: Brain,
-      database: Database,
-      users: Users
-    };
-    const IconComponent = icons[iconName] || Target;
+  const renderServiceIcon = useCallback((iconName) => {
+    const IconComponent = getServiceIcon(iconName);
     return <IconComponent className="w-6 h-6" />;
-  };
+  }, []);
 
-  const getIndustryIcon = (iconName) => {
-    const icons = {
-      'shopping-cart': ShoppingCart,
-      factory: Factory,
-      heart: Heart,
-      building: Building,
-      'credit-card': CreditCard
-    };
-    const IconComponent = icons[iconName] || ShoppingCart;
+  const renderIndustryIcon = useCallback((iconName) => {
+    const IconComponent = getIndustryIcon(iconName);
     return <IconComponent className="w-6 h-6" />;
-  };
+  }, []);
+
+  const handleAssessmentToggle = useCallback(() => {
+    setShowAssessment(true);
+  }, []);
 
   return (
     <div>
@@ -61,7 +53,7 @@ const Home = () => {
               Book a Discovery Call
             </Link>
             <button 
-              onClick={() => setShowAssessment(true)}
+              onClick={handleAssessmentToggle}
               className="btn-secondary"
             >
               Take AI Readiness Assessment
@@ -100,7 +92,7 @@ const Home = () => {
                 className={`voice-card ${service.color} hover-lift`}
               >
                 <div className="flex items-center mb-4">
-                  {getServiceIcon(service.icon)}
+                  {renderServiceIcon(service.icon)}
                   <h3 className="voice-card-title ml-3">{service.title}</h3>
                 </div>
                 <p className="voice-card-description">{service.description}</p>
@@ -138,7 +130,7 @@ const Home = () => {
                 className={`voice-card ${industry.color} hover-lift`}
               >
                 <div className="flex items-center mb-4">
-                  {getIndustryIcon(industry.icon)}
+                  {renderIndustryIcon(industry.icon)}
                   <h3 className="voice-card-title ml-3">{industry.name}</h3>
                 </div>
                 <p className="voice-card-description">{industry.description}</p>
@@ -215,7 +207,7 @@ const Home = () => {
                 Book Discovery Call
               </Link>
               <button 
-                onClick={() => setShowAssessment(true)}
+                onClick={handleAssessmentToggle}
                 className="btn-secondary"
               >
                 Take AI Readiness Assessment
@@ -231,6 +223,6 @@ const Home = () => {
       />
     </div>
   );
-};
+});
 
 export default Home;
