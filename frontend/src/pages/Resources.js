@@ -16,10 +16,67 @@ const Resources = () => {
     ? resources 
     : resources.filter(resource => resource.category === selectedCategory);
 
-  const handleDownload = (resource) => {
-    // Mock download functionality
-    console.log(`Downloading: ${resource.title}`);
-    // In a real app, this would trigger the actual download
+  const handleDownload = async (resource) => {
+    try {
+      if (resource.id === 1) { // AI Readiness Toolkit
+        // Fetch the HTML content for better formatting
+        const response = await fetch('/ai-readiness-toolkit.html');
+        const content = await response.text();
+        
+        // Create and download the HTML file
+        const blob = new Blob([content], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ai-readiness-toolkit-${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast.success(`${resource.title} downloaded successfully! You can open this HTML file in any browser or convert it to PDF.`);
+      } else if (resource.id === 2) { // RFP Template
+        // Fetch the HTML content for better formatting
+        const response = await fetch('/rfp-template-ai-projects.html');
+        const content = await response.text();
+        
+        // Create and download the HTML file
+        const blob = new Blob([content], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rfp-template-ai-projects-${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast.success(`${resource.title} downloaded successfully! You can open this HTML file in any browser or convert it to PDF.`);
+      } else if (resource.id === 3) { // Prompt Engineering Playbook
+        // Fetch the HTML content for better formatting
+        const response = await fetch('/prompt-engineering-playbook.html');
+        const content = await response.text();
+        
+        // Create and download the HTML file
+        const blob = new Blob([content], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `prompt-engineering-playbook-${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast.success(`${resource.title} downloaded successfully! You can open this HTML file in any browser or convert it to PDF.`);
+      } else {
+        // For other resources, show coming soon message
+        toast.info(`${resource.title} will be available soon!`);
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to download resource. Please try again.');
+    }
   };
 
   const handleNewsletterSubmit = async (e) => {

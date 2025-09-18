@@ -100,7 +100,7 @@ const Team = () => {
                       <Linkedin className="w-4 h-4" />
                     </a>
                     <a
-                      href="mailto:hello@kaleidospark.com"
+                      href="mailto:kaleidospark@icloud.com"
                       className="flex items-center justify-center w-10 h-10 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
                       aria-label={`Email ${member.name}`}
                     >

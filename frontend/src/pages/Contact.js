@@ -25,6 +25,78 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('contact');
 
+  const downloadToolkit = async (toolkitType) => {
+    try {
+      // Fetch the HTML content for better formatting
+      const response = await fetch('/ai-readiness-toolkit.html');
+      const content = await response.text();
+      
+      // Create and download the HTML file
+      const blob = new Blob([content], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ai-readiness-toolkit-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('AI Readiness Toolkit downloaded successfully! You can open this HTML file in any browser or convert it to PDF.');
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to download toolkit. Please try again.');
+    }
+  };
+
+  const downloadRFP = async () => {
+    try {
+      // Fetch the HTML content for better formatting
+      const response = await fetch('/rfp-template-ai-projects.html');
+      const content = await response.text();
+      
+      // Create and download the HTML file
+      const blob = new Blob([content], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rfp-template-ai-projects-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('RFP Template downloaded successfully! You can open this HTML file in any browser or convert it to PDF.');
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to download RFP template. Please try again.');
+    }
+  };
+
+  const downloadPromptPlaybook = async () => {
+    try {
+      // Fetch the HTML content for better formatting
+      const response = await fetch('/prompt-engineering-playbook.html');
+      const content = await response.text();
+      
+      // Create and download the HTML file
+      const blob = new Blob([content], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prompt-engineering-playbook-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Prompt Engineering Playbook downloaded successfully! You can open this HTML file in any browser or convert it to PDF.');
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to download prompt playbook. Please try again.');
+    }
+  };
+
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -106,7 +178,7 @@ const Contact = () => {
                     <Mail className="w-6 h-6 text-gray-500" />
                     <div>
                       <div className="heading-3">Email</div>
-                      <div className="body-medium text-gray-600">hello@kaleidospark.com</div>
+                      <div className="body-medium text-gray-600">kaleidospark@icloud.com</div>
                     </div>
                   </div>
                   
@@ -114,7 +186,7 @@ const Contact = () => {
                     <Phone className="w-6 h-6 text-gray-500" />
                     <div>
                       <div className="heading-3">Phone</div>
-                      <div className="body-medium text-gray-600">+1 (555) 123-4567</div>
+                      <div className="body-medium text-gray-600">+1 310 748 8911</div>
                     </div>
                   </div>
                   
@@ -412,21 +484,36 @@ const Contact = () => {
                 <Download className="w-8 h-8 mx-auto mb-4 text-gray-700" />
                 <h3 className="heading-3 mb-2">AI Readiness Toolkit</h3>
                 <p className="body-small text-gray-600 mb-4">Assessment framework and implementation roadmap</p>
-                <button className="btn-secondary w-full">Download PDF</button>
+                <button 
+                  onClick={() => downloadToolkit('ai-readiness-toolkit')}
+                  className="btn-secondary w-full"
+                >
+                  Download Toolkit
+                </button>
               </div>
               
               <div className="bg-white rounded-xl p-6 text-center shadow-sm">
                 <Download className="w-8 h-8 mx-auto mb-4 text-gray-700" />
                 <h3 className="heading-3 mb-2">RFP Template</h3>
                 <p className="body-small text-gray-600 mb-4">Template for evaluating AI vendors and solutions</p>
-                <button className="btn-secondary w-full">Download Word</button>
+                <button 
+                  onClick={downloadRFP}
+                  className="btn-secondary w-full"
+                >
+                  Download Template
+                </button>
               </div>
               
               <div className="bg-white rounded-xl p-6 text-center shadow-sm">
                 <Download className="w-8 h-8 mx-auto mb-4 text-gray-700" />
                 <h3 className="heading-3 mb-2">Prompt Playbook</h3>
                 <p className="body-small text-gray-600 mb-4">Best practices for effective prompt engineering</p>
-                <button className="btn-secondary w-full">Download PDF</button>
+                <button 
+                  onClick={downloadPromptPlaybook}
+                  className="btn-secondary w-full"
+                >
+                  Download Playbook
+                </button>
               </div>
             </div>
           </div>

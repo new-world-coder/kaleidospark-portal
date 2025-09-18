@@ -102,11 +102,11 @@ const Footer = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="w-4 h-4 text-gray-500" />
-                  <span className="body-small">hello@kaleidospark.com</span>
+                  <span className="body-small">kaleidospark@icloud.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="w-4 h-4 text-gray-500" />
-                  <span className="body-small">+1 (555) 123-4567</span>
+                  <span className="body-small">+1 310 748 8911</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-4 h-4 text-gray-500" />

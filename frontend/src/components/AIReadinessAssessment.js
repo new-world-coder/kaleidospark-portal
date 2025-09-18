@@ -165,8 +165,8 @@ ${recommendations.map(rec => `• ${rec}`).join('\n')}
 
 Next Steps:
 Contact KaleidoSpark for a personalized consultation to discuss your AI transformation roadmap.
-Email: hello@kaleidospark.com
-Phone: +1 (555) 123-4567
+Email: kaleidospark@icloud.com
+Phone: +1 310 748 8911
     `.trim();
 
     const blob = new Blob([content], { type: 'text/plain' });
