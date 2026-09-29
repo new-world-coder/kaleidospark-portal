@@ -57,10 +57,25 @@ When `DATABASE_URL` or `RESEND_API_KEY` are missing, lead capture still succeeds
 - `/admin/leads` · `/admin/subscribers`
 - `/keystatic` — content CMS
 
+## Vercel project settings (required — fixes platform `NOT_FOUND`)
+
+This app lives at the **repo root** (not `frontend/`). A root `vercel.json` locks Framework to **Next.js** and sets build/install commands. It **cannot** clear a dashboard Root Directory override.
+
+If every URL returns Vercel platform 404 (`x-vercel-error: NOT_FOUND`, plain-text body — not a Next.js HTML 404), the project almost certainly still has CRA-era settings (`Root Directory = frontend`, Output Directory `build`/`public`, non-Next framework). Fix:
+
+1. Open the Vercel project → **Settings** → **General**
+2. **Root Directory** → **Edit** → clear the value (leave empty / `.`) → **Save**
+3. **Framework Preset** → **Next.js**
+4. **Build & Development Settings** → clear any **Output Directory** override (Next.js manages `.next`; do not set `build` or `public`)
+5. Confirm **Build Command** is `npm run build` (or leave Override off so `vercel.json` applies)
+6. **Deployments** → open the latest → **⋯** → **Redeploy** (uncheck “Use existing Build Cache” if available)
+
+After redeploy, `https://kaleidospark-portal.vercel.app/` should return **HTTP 200** with HTML containing `KaleidoSpark`.
+
 ## DNS / Vercel Hobby checklist (kaleidosparkhq.com)
 
-1. Create a Vercel project from this repo (Hobby). Framework preset: Next.js. Root directory: `.`
-2. Add environment variables from `.env.example` (production + preview as needed).
+1. Confirm project settings above (root `.`, Framework Next.js, no Output Directory override).
+2. Add environment variables from `.env.example` (production + preview as needed). Minimum: `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PORTAL_URL`.
 3. In the domain registrar for **kaleidosparkhq.com**:
    - Apex: point to Vercel (`A` 76.76.21.21 or Vercel nameservers)
    - `www` CNAME → `cname.vercel-dns.com` (or Vercel’s shown target)
