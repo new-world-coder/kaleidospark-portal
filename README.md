@@ -1,160 +1,94 @@
-# KaleidoSpark - AI Consulting Platform
+# KaleidoSpark marketing site
 
-KaleidoSpark is a comprehensive AI consulting platform that helps businesses navigate their AI transformation journey. Our platform offers strategic consulting, implementation services, and ongoing support to ensure successful AI adoption.
+Greenfield **Next.js App Router** marketing site for [kaleidosparkhq.com](https://kaleidosparkhq.com).
 
-## Features
+The previous CRA + FastAPI + Mongo portal in this repository has been replaced. Product experiences live on the portal at `NEXT_PUBLIC_PORTAL_URL` (default `https://app.kaleidosparkhq.com`).
 
-### Core Platform
-- **Homepage** with hero section and service overview
-- **Services** page with detailed AI consulting offerings
-- **Industries** page showcasing sector-specific expertise
-- **Resources** page with whitepapers, case studies, and insights
-- **Events** page with upcoming webinars and workshops
-- **Contact** forms and discovery call booking
-- **Team** page highlighting our AI experts
+## Stack (free-tier oriented)
 
-### Advanced Features
-- **Admin Dashboard** for managing contacts, bookings, and analytics
-- **Global Search** functionality across all content
-- **AI Readiness Assessment** tool for lead generation
-- **Client Testimonials** slider
-- **Newsletter Subscription** system
-- **Google Analytics** integration
+| Need | Choice |
+|------|--------|
+| App | Next.js + TypeScript + Tailwind CSS + shadcn-style primitives + Framer Motion |
+| Content | Keystatic (git-backed Markdoc) for blog / research / newsroom / events |
+| Leads DB | Neon serverless Postgres (`DATABASE_URL`) — in-memory fallback when unset |
+| Admin auth | Auth.js + Google OAuth (`ADMIN_EMAILS` allowlist) |
+| Email | Resend |
+| Spam | Honeypot + optional Cloudflare Turnstile |
+| CRM | Optional `CRM_WEBHOOK_URL` (Zapier/Make) |
+| Hosting | Vercel Hobby |
 
-## Technology Stack
+## Local development
 
-### Frontend
-- **React 19** with modern hooks and components
-- **Tailwind CSS** for responsive design
-- **Radix UI** for accessible component primitives
-- **Lucide React** for consistent iconography
-- **React Router** for navigation
-- **Axios** for API communication
-
-### Backend
-- **Python Flask** REST API
-- **CORS** enabled for cross-origin requests
-- **JSON** data persistence
-- **Form validation** and error handling
-
-## Getting Started
-
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn package manager
-- Python 3.8+ (for backend)
-
-### Installation & Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd kaleidospark
-   ```
-
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm start
-   ```
-
-4. **Start the backend (in a separate terminal)**
-   ```bash
-   cd backend
-   python server.py
-   ```
-
-The application will be available at `http://localhost:3000`
-
-### Available Scripts
-
-- `npm start` - Runs the app in development mode
-- `npm run build` - Builds the app for production
-- `npm test` - Launches the test runner
-
-## Project Structure
-
-```
-kaleidospark/
-├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── ui/             # Radix UI components
-│   │   ├── Header.js       # Main navigation
-│   │   ├── Footer.js       # Site footer
-│   │   └── ...
-│   ├── pages/              # Page components
-│   │   ├── admin/          # Admin dashboard pages
-│   │   ├── Home.js         # Homepage
-│   │   ├── Services.js     # Services overview
-│   │   └── ...
-│   ├── services/           # API integration
-│   ├── hooks/              # Custom React hooks
-│   └── lib/                # Utility functions
-├── backend/                # Python Flask API
-├── public/                 # Static assets
-└── package.json           # Dependencies and scripts
+```bash
+cp .env.example .env.local
+npm install
+npm run dev
 ```
 
-## Admin Dashboard
+Scripts: `npm run lint` · `npm run typecheck` · `npm run build`
 
-Access the admin dashboard at `/admin/login` with the following credentials:
-- **Username:** admin
-- **Password:** admin123
+## Environment variables
 
-### Admin Features
-- View and manage contact submissions
-- Track discovery call bookings
-- Monitor newsletter subscribers
-- View analytics and conversion metrics
-- Export data for reporting
+See `.env.example`. Minimum for a public deploy:
 
-## API Endpoints
+- `NEXT_PUBLIC_SITE_URL=https://kaleidosparkhq.com`
+- `NEXT_PUBLIC_PORTAL_URL=https://app.kaleidosparkhq.com`
+- `AUTH_SECRET` (generate with `openssl rand -base64 32`)
 
-The backend provides the following REST API endpoints:
+Recommended for production forms/admin:
 
-- `POST /api/contact` - Submit contact form
-- `POST /api/discovery-call` - Book discovery call
-- `POST /api/newsletter` - Newsletter subscription
-- `POST /api/event-registration` - Event registration
-- `GET /api/admin/*` - Admin dashboard data
-- `POST /api/admin/login` - Admin authentication
+- `DATABASE_URL` — Neon
+- `RESEND_API_KEY` / `RESEND_FROM_EMAIL` / `LEAD_NOTIFY_EMAIL`
+- `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` / `ADMIN_EMAILS`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` (optional)
+- `CRM_WEBHOOK_URL` (optional)
 
-## Environment Variables
+When `DATABASE_URL` or `RESEND_API_KEY` are missing, lead capture still succeeds using an in-memory store / skipped email (useful for CI and local UI).
 
-Create a `.env` file in the root directory:
+## Content
 
-```env
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_GA_TRACKING_ID=your-google-analytics-id
-```
+- Collections live under `content/{blog,research,newsroom,events}`
+- Edit via `/keystatic` (open in development; SSO-gated in production)
+- Resource downloads under `public/resources/`
 
-## Deployment
+## Admin
 
-### Frontend Deployment
-1. Build the production version: `npm run build`
-2. Deploy the `build` folder to your hosting provider
+- `/admin` — Google SSO, allowlisted emails only
+- `/admin/leads` · `/admin/subscribers`
+- `/keystatic` — content CMS
 
-### Backend Deployment
-1. Ensure Python dependencies are installed
-2. Configure environment variables
-3. Deploy to your preferred Python hosting service
+## Vercel project settings (required — fixes platform `NOT_FOUND`)
 
-## Contributing
+This app lives at the **repo root** (not `frontend/`). A root `vercel.json` locks Framework to **Next.js** and sets build/install commands. It **cannot** clear a dashboard Root Directory override.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+If every URL returns Vercel platform 404 (`x-vercel-error: NOT_FOUND`, plain-text body — not a Next.js HTML 404), the project almost certainly still has CRA-era settings (`Root Directory = frontend`, Output Directory `build`/`public`, non-Next framework). Fix:
 
-## Support
+1. Open the Vercel project → **Settings** → **General**
+2. **Root Directory** → **Edit** → clear the value (leave empty / `.`) → **Save**
+3. **Framework Preset** → **Next.js**
+4. **Build & Development Settings** → clear any **Output Directory** override (Next.js manages `.next`; do not set `build` or `public`)
+5. Confirm **Build Command** is `npm run build` (or leave Override off so `vercel.json` applies)
+6. **Deployments** → open the latest → **⋯** → **Redeploy** (uncheck “Use existing Build Cache” if available)
 
-For technical support or questions about KaleidoSpark, please contact our development team.
+After redeploy, `https://kaleidospark-portal.vercel.app/` should return **HTTP 200** with HTML containing `KaleidoSpark`.
 
----
+## DNS / Vercel Hobby checklist (kaleidosparkhq.com)
 
-**KaleidoSpark** - Transforming businesses through intelligent AI solutions.
+1. Confirm project settings above (root `.`, Framework Next.js, no Output Directory override).
+2. Add environment variables from `.env.example` (production + preview as needed). Minimum: `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PORTAL_URL`.
+3. In the domain registrar for **kaleidosparkhq.com**:
+   - Apex: point to Vercel (`A` 76.76.21.21 or Vercel nameservers)
+   - `www` CNAME → `cname.vercel-dns.com` (or Vercel’s shown target)
+4. In Vercel → Domains: add `kaleidosparkhq.com` and `www.kaleidosparkhq.com`; set **www → apex** redirect.
+5. Plan `app.kaleidosparkhq.com` separately for the portal product (not this app).
+6. Create a Neon project; paste `DATABASE_URL`; redeploy.
+7. Create a Resend account; verify sending domain (or use onboarding domain for tests); set keys.
+8. Google Cloud OAuth client (Web): authorized redirect URI `https://kaleidosparkhq.com/api/auth/callback/google` (and localhost for dev).
+9. Set `ADMIN_EMAILS` to the Google accounts that may access `/admin`.
+10. Optional: Cloudflare Turnstile site + secret; Zapier/Make webhook URL.
+11. Confirm `/sitemap.xml` and `/robots.txt` after first deploy.
+12. Smoke-test contact form, newsletter, assessment email gate, and admin SSO.
+
+## Primary IA
+
+Services · Industries · Insights · Products · About · Contact — plus footer/sitemap routes for solutions, case studies, research, careers, investors, partners, open source, resources, assessment, and legal pages.
