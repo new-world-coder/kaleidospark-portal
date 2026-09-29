@@ -17,10 +17,18 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
-          className="display text-2xl tracking-tight text-[var(--ink)] focus-ring"
+          className="inline-flex shrink-0 items-center focus-ring"
           aria-label={`${siteConfig.name} home`}
         >
-          Kaleido<span className="text-[var(--accent)]">Spark</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/logo-primary.svg"
+            alt={siteConfig.name}
+            width={220}
+            height={36}
+            className="h-8 w-auto sm:h-9"
+            fetchPriority="high"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
