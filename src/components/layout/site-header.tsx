@@ -22,10 +22,10 @@ export function SiteHeader() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/brand/logo-primary.svg"
+            src="/brand/logo-primary.png"
             alt={siteConfig.name}
-            width={220}
-            height={36}
+            width={190}
+            height={48}
             className="h-8 w-auto sm:h-9"
             fetchPriority="high"
           />
